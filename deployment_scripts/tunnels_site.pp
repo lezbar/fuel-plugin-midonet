@@ -26,7 +26,7 @@ $midonet_nodes = concat($midonet_nodes1,$midonet_nodes2)
 
 $nodes_adresses = nodes_to_hash($midonet_nodes,'fqdn','internal_address')
 $access_hash          = $::fuel_settings['access']
-$service_endpoint              = $::fuel_settings['management_vip']
+$service_endpoint              = $::fuel_settings['internal_address']
 $neutron_config                = $::fuel_settings['quantum_settings']
 
 Nova_config<||> -> Exec['/etc/init.d/openstack-nova-api restart']

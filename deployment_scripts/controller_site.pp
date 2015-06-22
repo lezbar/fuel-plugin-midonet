@@ -33,7 +33,7 @@ if $::internal_address in $controller_nodes {
 } else {
   $amqp_nodes = fqdn_rotate($controller_nodes)
 }
-$amqp_port = '5673'
+$amqp_port = '5672'
 $amqp_hosts = inline_template("<%= @amqp_nodes.map {|x| x + ':' + @amqp_port}.join ',' %>")
 $amqp_user = 'nova'
 $amqp_password = $::fuel_settings['rabbit']['password']
@@ -41,7 +41,7 @@ $amqp_password = $::fuel_settings['rabbit']['password']
 
 
 $access_hash          = $::fuel_settings['access']
-$midonet_api_address = $primary_controller_nodes[0]['internal_address']
+$midonet_api_address = $controllers[0]['internal_address']
 
 #Logging
 $verbose = true
@@ -50,7 +50,7 @@ $use_syslog = $::fuel_settings['use_syslog'] ? { default=>true }
 $syslog_log_facility_neutron    = 'LOG_LOCAL4'
 
 #Neutron
-$db_host                       = $::fuel_settings['management_vip']
+$db_host                       = $internal_address
 $neutron_db_user               = 'neutron'
 $neutron_config                = $::fuel_settings['quantum_settings']
 $network_provider              = 'neutron'
@@ -61,7 +61,7 @@ $base_mac                      = 'fa:16:3e:00:00:00'
 $neutron_db_dbname             = 'neutron'
 $service_plugins               = ['neutron.services.l3_router.l3_router_plugin.L3RouterPlugin','neutron.services.metering.metering_plugin.MeteringPlugin']
 $mechanism_drivers             = 'openvswitch'
-$service_endpoint              = $::fuel_settings['management_vip']
+$service_endpoint              = $internal_address
 
 #Nova
 $nova_user_password = $::fuel_settings['nova']['user_password']

@@ -19,10 +19,10 @@ class plugin_midonet::midonetapi {
 
   $primary_controller = $::fuel_settings['role'] ? { 'primary-controller'=>true, default=>false }
 
-  class { 'cluster::haproxy_ocf':
-    primary_controller => $primary_controller
-  }
-
+#   class { 'cluster::haproxy_ocf':
+#     primary_controller => $primary_controller
+#   }
+# 
   package { ['tomcat6', 'midonet-api']:
     ensure => present,
   }
@@ -47,31 +47,31 @@ class plugin_midonet::midonetapi {
     #    notify => Exec['/sbin/service tomcat6 restart'],
   }
 
-  Haproxy::Service        { use_include => true }
-  Haproxy::Balancermember { use_include => true }
+#   Haproxy::Service        { use_include => true }
+#   Haproxy::Balancermember { use_include => true }
+# 
+#   Openstack::Ha::Haproxy_service {
+#     server_names        => filter_hash($::controllers, 'name'),
+#     ipaddresses         => filter_hash($::controllers, 'internal_address'),
+#     public_virtual_ip   => $::fuel_settings['public_vip'],
+#     internal_virtual_ip => $::fuel_settings['internal_address'],
+#   }
+# 
 
-  Openstack::Ha::Haproxy_service {
-    server_names        => filter_hash($::controllers, 'name'),
-    ipaddresses         => filter_hash($::controllers, 'internal_address'),
-    public_virtual_ip   => $::fuel_settings['public_vip'],
-    internal_virtual_ip => $::fuel_settings['management_vip'],
-  }
-
-
-  openstack::ha::haproxy_service { 'midonetapi':
-    order                  => 199,
-    listen_port            => 8081,
-    balancermember_port    => 8081,
-    define_backups         => true,
-    before_start           => true,
-    public                 => true,
-    haproxy_config_options => {
-      'balance'        => 'roundrobin',
-      'option'         => ['httplog'],
-    },
-    balancermember_options => 'check',
-  }
-
+#   openstack::ha::haproxy_service { 'midonetapi':
+#     order                  => 199,
+#     listen_port            => 8081,
+#     balancermember_port    => 8081,
+#     define_backups         => true,
+#     before_start           => true,
+#     public                 => true,
+#     haproxy_config_options => {
+#       'balance'        => 'roundrobin',
+#       'option'         => ['httplog'],
+#     },
+#     balancermember_options => 'check',
+#   }
+# 
   #  exec { '/sbin/service tomcat6 restart':
   #  require => Service['tomcat6'],
   #}

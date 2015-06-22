@@ -14,7 +14,7 @@
 
 class plugin_midonet::neutron {
 
-  $primary_controller = $::fuel_settings['role'] ? { 'primary-controller'=>true, default=>false }
+  $primary_controller = $::fuel_settings['role'] ? { 'controller'=>true, default=>false }
   if $primary_controller {
     if ($::neutron::params::server_package) {
       # Debian platforms
@@ -48,26 +48,26 @@ class plugin_midonet::neutron {
     class { 'neutron::keystone::auth':
       password         => $::neutron_user_password,
       public_address   => $::fuel_settings['public_vip'],
-      admin_address    => $::fuel_settings['management_vip'],
-      internal_address => $::fuel_settings['management_vip'],
+      admin_address    => $::internal_address, #$::fuel_settings['internal_address'],
+      internal_address => $::internal_address, #$::fuel_settings['internal_address'],
     }
   }
 
-  class { 'cluster::haproxy_ocf':
-    primary_controller => $primary_controller
-  }
-  Haproxy::Service        { use_include => true }
-  Haproxy::Balancermember { use_include => true }
-
-  Openstack::Ha::Haproxy_service {
-    server_names        => filter_hash($::controllers, 'name'),
-    ipaddresses         => filter_hash($::controllers, 'internal_address'),
-    public_virtual_ip   => $::fuel_settings['public_vip'],
-    internal_virtual_ip => $::fuel_settings['management_vip'],
-  }
-
-
-  class { 'openstack::ha::neutron': }
+#   class { 'cluster::haproxy_ocf':
+#     primary_controller => $primary_controller
+#   }
+#   Haproxy::Service        { use_include => true }
+#   Haproxy::Balancermember { use_include => true }
+# 
+#   Openstack::Ha::Haproxy_service {
+#     server_names        => filter_hash($::controllers, 'name'),
+#     ipaddresses         => filter_hash($::controllers, 'internal_address'),
+#     public_virtual_ip   => $::fuel_settings['public_vip'],
+#     internal_virtual_ip => $::fuel_settings['internal_address'],
+#   }
+# 
+# 
+#   class { 'openstack::ha::neutron': }
   class { 'openstack::network':
     network_provider    => $::neutron_db_user,
     agents              => ['dhcp', 'metadata'],
@@ -78,10 +78,10 @@ class plugin_midonet::neutron {
     syslog_log_facility => $::syslog_log_facility_neutron,
 
     neutron_server      => true,
-    neutron_db_uri      => "mysql://${::neutron_db_user}:${::neutron_db_password}@${::db_host}/${::neutron_db_dbname}?&read_timeout=60",
-    public_address      => $::fuel_settings['public_vip'],
-    internal_address    => $::fuel_settings['management_vip'], # Could be this node or, internal_vip
-    admin_address       => $::fuel_settings['management_vip'],
+    neutron_db_uri      => "mysql://${::neutron_db_user}:${::neutron_db_password}@${::internal_address}/${::neutron_db_dbname}?&read_timeout=60",
+    public_address      => $::internal_address, #$::fuel_settings['public_vip'],
+    internal_address    => $::internal_address, #$::fuel_settings['internal_address'], # Could be this node or, internal_vip
+    admin_address       => $::internal_address, #$::fuel_settings['internal_address'],
     nova_neutron        => true,
     base_mac            => $::base_mac,
     core_plugin         => 'midonet.neutron.plugin.MidonetPluginV2',

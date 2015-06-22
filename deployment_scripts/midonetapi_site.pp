@@ -16,7 +16,8 @@ $fuel_settings = parseyaml($astute_settings_yaml)
 $nodes_hash = $::fuel_settings['nodes']
 $primary_controller_nodes = filter_nodes($nodes_hash,'role','primary-controller')
 $controllers = concat($primary_controller_nodes, filter_nodes($nodes_hash,'role','controller'))
-$service_endpoint              = $::fuel_settings['management_vip']
+$internal_address = $controllers[0]['internal_address']
+$service_endpoint = $internal_address
 stage { 'repos':
     before => Stage['main']
 }
