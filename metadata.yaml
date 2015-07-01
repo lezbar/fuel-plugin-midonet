@@ -3,34 +3,32 @@ name: midonet
 # Human-readable name for your plugin
 title: Neutron Midonet plugin
 # Plugin version
-version: 1.0.0
+version: 2.0.0
 # Description
 description: Enable to use plugin Midonet for Neutron
 # Required fuel version
-fuel_version: ['6.0','6.0.1']
+fuel_version: ['6.1']
+# Plugin authors
+authors: ["Lucas Eznarriaga"]
+# Plugin licenses
+licenses: [Apache License Version 2.0]
+# Plugin project homepage
+homepage: https://github.com/stackforge/fuel-plugin-midonet
+# Plugin group
+groups: ['network']
 
 # The plugin is compatible with releases in the list
 releases:
   - os: ubuntu
-    version: 2014.2-6.0
+    version: 2014.2-6.1
     mode: ['ha', 'multinode']
     deployment_scripts_path: deployment_scripts/
     repository_path: repositories/ubuntu
   - os: centos
-    version: 2014.2-6.0
-    mode: ['ha', 'multinode']
-    deployment_scripts_path: deployment_scripts/
-    repository_path: repositories/centos
-  - os: ubuntu
-    version: 2014.2.2-6.0.1
-    mode: ['ha', 'multinode']
-    deployment_scripts_path: deployment_scripts/
-    repository_path: repositories/ubuntu
-  - os: centos
-    version: 2014.2.2-6.0.1
+    version: 2014.2-6.1
     mode: ['ha', 'multinode']
     deployment_scripts_path: deployment_scripts/
     repository_path: repositories/centos
 
 # Version of plugin package
-package_version: '1.0.0'
+package_version: '2.0.0'

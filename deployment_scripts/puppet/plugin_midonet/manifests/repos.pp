@@ -29,11 +29,6 @@ class plugin_midonet::repos {
     content => template('plugin_midonet/CentOS-Base.repo'),
   }
 
-  file { '/etc/yum.repos.d/epel.repo':
-    ensure => present,
-    content => template('plugin_midonet/epel.repo'),
-  }
-
   yumrepo { 'midokura':
 #    ensure   => present,
     gpgcheck => 0,
