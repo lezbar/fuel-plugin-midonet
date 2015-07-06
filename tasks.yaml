@@ -9,76 +9,83 @@
     puppet_manifest: enable_ip_forward.pp
     puppet_modules: "puppet/:/etc/puppet/modules/"
     timeout: 360
-- role: ['midonet-gw']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: midonetdb_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 100
-- role: ['midonet-gw']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: stop_zookeeper.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 200
-- role: ['midonet-gw']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: start_zookeeper.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 300
-- role: ['controller']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: midonetapi_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 400
-- role: ['controller','midonet-gw','compute','midonet-simplegw']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: midolman_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 500
-- role: ['controller']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: controller_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 600
-- role: ['controller']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: tunnels_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 3600
-  priority: 800
-- role: ['compute']
-  stage: post_deployment
-  type: puppet
-  parameters:
-    puppet_manifest: compute_site.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
-    timeout: 360
-  priority: 900
 - role: '*'
-  stage: post_deployment
-  type: puppet
+  stage: pre_deployment
+  type: shell
   parameters:
-    puppet_manifest: cleanup.pp
-    puppet_modules: "puppet/:/etc/puppet/modules/"
+    cmd: ./install_midonet_module.sh
     timeout: 360
-  priority: 1000
 
+# - role: ['midonet-gw']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: midonetdb_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 100
+# - role: ['midonet-gw']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: stop_zookeeper.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 200
+# - role: ['midonet-gw']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: start_zookeeper.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 300
+# - role: ['controller']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: midonetapi_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 400
+# - role: ['controller','midonet-gw','compute','midonet-simplegw']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: midolman_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 500
+# - role: ['controller']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: controller_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 600
+# - role: ['controller']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: tunnels_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 3600
+#   priority: 800
+# - role: ['compute']
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: compute_site.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 900
+# - role: '*'
+#   stage: post_deployment
+#   type: puppet
+#   parameters:
+#     puppet_manifest: cleanup.pp
+#     puppet_modules: "puppet/:/etc/puppet/modules/"
+#     timeout: 360
+#   priority: 1000
+# 
